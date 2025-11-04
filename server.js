@@ -30,5 +30,14 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+// Serve static React build
+const __buildpath = path.join(__dirname, "client", "build");
+app.use(express.static(__buildpath));
+
+// ✅ FIX: Use regex instead of string for wildcard route
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__buildpath, "index.html"));
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
