@@ -24,20 +24,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client/build")));
-  app.get("/*", (_, res) => {
-    res.sendFile(path.join(__dirname, "client/dist/index.html"));
+  const clientPath = path.join(__dirname, "client", "dist");
+  app.use(express.static(clientPath));
+
+  // ✅ Express v5 fix: use '*' or regex, not '/*'
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(clientPath, "index.html"));
   });
 }
-
-// Serve static React build
-const __buildpath = path.join(__dirname, "client", "build");
-app.use(express.static(__buildpath));
-
-// ✅ FIX: Use regex instead of string for wildcard route
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__buildpath, "index.html"));
-});
-
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
