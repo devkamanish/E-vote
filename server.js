@@ -23,12 +23,13 @@ app.get("/", (req, res) => res.send("Eoving Auth & Voting API Running..."));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Serve frontend build in production
 if (process.env.NODE_ENV === "production") {
   const clientPath = path.join(__dirname, "client", "dist");
   app.use(express.static(clientPath));
 
-  // ✅ Express v5 fix: use '*' or regex, not '/*'
-  app.get("*", (req, res) => {
+  // ✅ Express 5 compatible fallback route
+  app.get(/^(?!\/api).*/, (req, res) => {
     res.sendFile(path.join(clientPath, "index.html"));
   });
 }
