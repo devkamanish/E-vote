@@ -2,6 +2,8 @@
   "name": "eoving-backend",
   "version": "1.0.0",
   "main": "server.js",
+    "type": "module",
+
  "scripts": {
   "dev": "concurrently \"npm run server\" \"npm run client\"",
   "server": "nodemon server.js",
