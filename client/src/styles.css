@@ -1,0 +1,12 @@
+body { font-family: Arial, sans-serif; margin: 0; background:#f6f7fb; color:#222; }
+nav { background:#fff; padding:12px 16px; display:flex; gap:8px; align-items:center; border-bottom:1px solid #eee; }
+nav a, nav button { margin-right:8px; }
+.app { max-width:900px; margin:30px auto; }
+.card { background:#fff; padding:18px; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,0.05); margin-bottom:16px; }
+.auth input { display:block; width:100%; padding:10px; margin:8px 0; border:1px solid #ddd; border-radius:4px; }
+.auth button { padding:10px 12px; margin-top:8px; }
+.msg { margin-top:10px; color:#0a0; }
+.votes { width:100%; border-collapse:collapse; margin-top:12px; }
+.votes th, .votes td { padding:8px; border:1px solid #eee; text-align:left; }
+.buttons button { margin-right:8px; padding:8px 12px; }
+.who { margin-left:auto; font-size:14px; color:#666; }
