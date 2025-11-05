@@ -43,7 +43,7 @@ function App() {
               >
                 Vote
               </button>
-              {user.email === "bhoomikadewka@gmail.com" && (
+              {user.email === "manishdevka76@gmail.com" && (
                 <button
                   onClick={() => navigate("/admin")}
                   className="text-sm md:text-base px-4 py-2 rounded-lg bg-purple-500 text-white hover:bg-purple-600"
