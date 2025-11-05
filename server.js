@@ -18,7 +18,7 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/votes", votesRoutes); // new
 
-app.get("/", (req, res) => res.send("Eoving Auth & Voting API Running..."));
+// app.get("/", (req, res) => res.send("Eoving Auth & Voting API Running..."));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
