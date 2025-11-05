@@ -1,8 +1,12 @@
 
-const BASE = "http://localhost:5000";
+const BASE =
+  import.meta.env.MODE === "production"
+    ? "" // In production, same domain serves API and frontend
+    : "http://localhost:5000";
 
 export async function api(path, options = {}) {
   const token = localStorage.getItem("token");
+
   const headers = {
     "Content-Type": "application/json",
     ...(options.headers || {})
