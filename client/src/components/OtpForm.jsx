@@ -36,7 +36,7 @@ export default function OtpForm({ setUser }) {
       localStorage.setItem("user", JSON.stringify(data.user));
       setUser(data.user);
       setMsg("Login successful 🎉");
-      if (data.user.email === "manishdevka76@gmail.com") navigate("/admin");
+      if (data.user.email === "bhoomikadewka@gmail.com") navigate("/admin");
       else navigate("/vote");
     } catch (err) {
       setMsg(err?.message || "Invalid OTP");

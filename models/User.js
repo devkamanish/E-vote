@@ -12,10 +12,15 @@ const userSchema = new mongoose.Schema(
     otpExpires: { type: Date },
 
     resetPasswordToken: { type: String },
-    resetPasswordExpires: { type: Date }
+    resetPasswordExpires: { type: Date },
+
+    // ✅ Add this field
+    isAdmin: { type: Boolean, default: false }
   },
   { timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);
 export default User;
+
+

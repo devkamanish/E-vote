@@ -4,6 +4,9 @@ import User from "../models/User.js";
 import { sendMail } from "../utils/mailer.js";
 import { generateJwt } from "../helpers/generateTokens.js";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+
+
 dotenv.config();
 const SALT_ROUNDS = 10;
 
@@ -67,52 +70,85 @@ export const login = async (req, res) => {
 // REQUEST OTP
 export const requestOtp = async (req, res) => {
   try {
-    const { email, number, state } = req.body;
+    const { email } = req.body;
     if (!email) return res.status(400).json({ message: "Email required" });
 
-    let user = await User.findOne({ email });
-    if (!user) user = new User({ email, number, state });
+    // 1️⃣ Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not registered with this email" });
+    }
 
-    const otp = generateNumericOtp(6);
+    // 2️⃣ Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // 3️⃣ Save OTP and expiry (10 mins)
     user.otp = otp;
     user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
     await user.save();
-    
-    await sendMail({ to: email, subject: "Your OTP Code", html: `<p>Your OTP is <b>${otp}</b>. It expires in 10 minutes.</p>` });
+
+    // 4️⃣ Send OTP email
+    await sendMail({
+      to: email,
+      subject: "Your OTP Code",
+      html: `<p>Your OTP is <b>${otp}</b>. It expires in 10 minutes.</p>`,
+    });
 
     res.json({ message: "OTP sent to email" });
   } catch (err) {
-    console.error(err);
+    console.error("Error sending OTP:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
 
 
 // VERIFY OTP   
+
 export const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
+
+    if (!email || !otp)
+      return res.status(400).json({ message: "Email and OTP are required" });
+
     const user = await User.findOne({ email });
+    if (!user)
+      return res.status(404).json({ message: "User not registered with this email" });
 
-    if (!user || user.otp !== otp || user.otpExpires < new Date())
-      return res.status(400).json({ message: "Invalid or expired OTP" });
+    if (!user.otp || user.otp !== otp)
+      return res.status(400).json({ message: "Invalid OTP" });
 
+    if (user.otpExpires < new Date())
+      return res.status(400).json({ message: "OTP has expired" });
+
+    // ✅ Clear OTP after successful verification
     user.otp = undefined;
     user.otpExpires = undefined;
     await user.save();
 
-    const token = generateJwt(user);
+    // ✅ Generate the same JWT used in password login
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
     res.json({
-      message: "OTP verified, logged in",
+      message: "OTP verified successfully",
       token,
-      user: { id: user._id, name: user.name, email, number: user.number, state: user.state }
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        number: user.number,
+        state: user.state
+      }
     });
   } catch (err) {
-    console.error(err);
+    console.error("Error verifying OTP:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
-
 // FORGOT PASSWORD
 export const forgotPassword = async (req, res) => {
   try {
