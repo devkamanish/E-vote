@@ -1,7 +1,6 @@
-
 const BASE =
   import.meta.env.MODE === "production"
-    ? "" // In production, same domain serves API and frontend
+    ? import.meta.env.VITE_API_BASE_URL // ✅ uses environment variable on Render
     : "http://localhost:5000";
 
 export async function api(path, options = {}) {
@@ -9,14 +8,14 @@ export async function api(path, options = {}) {
 
   const headers = {
     "Content-Type": "application/json",
-    ...(options.headers || {})
+    ...(options.headers || {}),
   };
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
   const res = await fetch(`${BASE}${path}`, {
     ...options,
     headers,
-    body: options.body ? JSON.stringify(options.body) : undefined
+    body: options.body ? JSON.stringify(options.body) : undefined,
   });
 
   const contentType = res.headers.get("content-type");
@@ -25,11 +24,7 @@ export async function api(path, options = {}) {
     if (!res.ok) throw data;
     return data;
   } else {
-    // non-json
     if (!res.ok) throw { message: "Network error" };
     return {};
   }
 }
-
-
-
