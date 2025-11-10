@@ -60,25 +60,34 @@ export default function AuthForm({ setUser }) {
   };
 
   const submit = async (e) => {
-    e.preventDefault();
-    setMsg("");
-    if (!validateForm()) return;
+  e.preventDefault();
+  setMsg("");
+  if (!validateForm()) return;
 
-    setLoading(true);
-    try {
-      const endpoint = isRegister ? "/api/auth/register" : "/api/auth/login";
-      const data = await api(endpoint, { method: "POST", body: form });
+  setLoading(true);
+  try {
+    const endpoint = isRegister ? "/api/auth/register" : "/api/auth/login";
+    const data = await api(endpoint, { method: "POST", body: form });
 
+    if (isRegister) {
+      // After registering, redirect to login page
+      setIsRegister(false);
+      setForm({ name: "", email: "", password: "", number: "", state: "" });
+      setMsg("Registration successful! Please login.");
+    } else {
+      // After login, store token and go to vote page
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       setUser(data.user);
       navigate("/vote");
-    } catch (err) {
-      setMsg(err?.message || "Error occurred. Please try again.");
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (err) {
+    setMsg(err?.message || "Error occurred. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-8">
