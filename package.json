@@ -2,15 +2,15 @@
   "name": "eoving-backend",
   "version": "1.0.0",
   "main": "server.js",
-    "type": "module",
-
- "scripts": {
-  "start" : "node server.js",
-  "dev": "concurrently \"npm run server\" \"npm run client\"",
-  "server": "nodemon server.js",
-  "client": "cd client && npm run dev"
-},
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon server.js",
+    "client": "cd client && npm run dev"
+  },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
