@@ -21,4 +21,3 @@ router.post("/reset-password", resetPassword);
 router.get("/me", authMiddleware, getMe);
 
 export default router;
-

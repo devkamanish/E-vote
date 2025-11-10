@@ -1,3 +1,4 @@
+
 import Vote from "../models/Vote.js";
 
 // Create a vote (protected)
@@ -40,5 +41,3 @@ export const getAllVotes = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-

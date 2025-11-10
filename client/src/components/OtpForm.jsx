@@ -44,7 +44,8 @@ export default function OtpForm({ setUser }) {
       setLoading(false);
     }
   };
-
+   
+  
   return (
     <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-8">
       <h3 className="text-2xl font-semibold text-center text-blue-600 mb-4">
@@ -85,4 +86,3 @@ export default function OtpForm({ setUser }) {
     </div>
   );
 }
-
